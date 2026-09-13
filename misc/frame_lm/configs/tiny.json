@@ -1,0 +1,9 @@
+{
+  "backend": "tiny",
+  "checkpoint": "state/tiny.pt",
+  "context_char_budget": 650,
+  "max_prompt_chars": 250,
+  "max_new_tokens": 180,
+  "candidate_count": 2,
+  "include_extractive_fallback": true
+}

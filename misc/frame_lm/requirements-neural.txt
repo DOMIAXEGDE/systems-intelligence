@@ -1,0 +1,3 @@
+# Optional; the extractive and Ollama backends use only the Python standard library.
+# Install an appropriate CPU/CUDA build following https://pytorch.org/get-started/locally/
+torch>=2.6,<3

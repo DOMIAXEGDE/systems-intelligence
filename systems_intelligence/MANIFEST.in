@@ -1,0 +1,4 @@
+include *.md *.ps1 *.cmd
+recursive-include examples *.json *.py
+recursive-include configs *.json
+recursive-include framelm/studio_web *.html *.js *.css

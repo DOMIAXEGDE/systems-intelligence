@@ -1,0 +1,22 @@
+{
+  "version": "0.3.0",
+  "tests_passed": 48,
+  "neural_tests_skipped": 4,
+  "neural_skip_reason": "Optional PyTorch unavailable",
+  "cpp_parity": "Passed: original 4.cpp and 5.cpp ranges; all four 6.cpp flows with ASCII payloads",
+  "context_lifecycle": "Append, edit, disable, re-enable, reindex, stale revision, regeneration and cancellation rollback passed",
+  "http_tests": "API lifecycle, live retrieval, generation jobs, duplicate ranges, CSRF validation, assets and preview passed",
+  "python_syntax": "All Python source files parsed",
+  "javascript_syntax": "node --check passed",
+  "visual_browser_test": "Unverified: remote browser rejected loopback URL with ERR_BLOCKED_BY_CLIENT",
+  "windows_execution": "Not tested; provided CMD launcher and portable Python code",
+  "trained_weights_included": false,
+  "source_sha256": {
+    "4.cpp": "4750deee376f6ecff5ccfa89ab49e429bb2a1ebb0e6cb8a9c3f638a8812510d2",
+    "6.cpp": "5251dc2d6d1f32a9e8969f2d09a382c23640613c12af936bab0732e6727d8955",
+    "5.cpp": "091267f86223015f6432b0d66167f9dda5a248567bb30a0a7a10edf34aabd264"
+  },
+  "chat_tests_passed": 11,
+  "chat_http": "Passed",
+  "chat_backend_inference": "Extractive tested; configured backend selection mocked; live neural inference unverified"
+}

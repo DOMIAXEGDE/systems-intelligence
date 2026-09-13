@@ -1,0 +1,9 @@
+{
+  "backend": "ollama",
+  "endpoint": "http://localhost:11434",
+  "model": "REPLACE_WITH_AN_INSTALLED_MODEL_NAME",
+  "context_char_budget": 6000,
+  "candidate_count": 2,
+  "max_new_tokens": 512,
+  "include_extractive_fallback": true
+}

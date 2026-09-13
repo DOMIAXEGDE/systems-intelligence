@@ -1,0 +1,2 @@
+{"prompt": "Explain closure of a binary operation.", "contexts": ["Closure means the operation maps each pair of set elements to an element of that same set."], "response": "Closure means each result remains in the same set. [C1]"}
+{"prompt": "What should happen when context is missing?", "contexts": ["If evidence is insufficient, the resolver should acknowledge the missing information."], "response": "The resolver should state that the available evidence is insufficient. [C1]"}

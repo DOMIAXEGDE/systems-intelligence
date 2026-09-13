@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="studio-token" content="__CSRF_TOKEN__">
+  <title>Systems Intelligence · Controller</title>
+  <link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script>
+  <link rel="stylesheet" href="/controller.css"><script src="/controller.js" defer></script>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="brand"><span class="mark">F</span><div>FrameLM<small>CONTEXT STUDIO</small></div></div>
+  <div class="nav-label">WORKSPACE</div>
+  <nav aria-label="Workspace">
+    <button class="nav" data-tab="controller"><span>⌁</span> Controller</button>
+    <button class="nav" data-tab="chat"><span>◌</span> Chat</button>
+    <button class="nav active" data-tab="contexts"><span>▦</span> Contexts</button>
+    <button class="nav" data-tab="generator"><span>◇</span> Generator</button>
+    <button class="nav" data-tab="test"><span>⌕</span> Retrieval check</button>
+  </nav>
+  <div class="side-note"><span class="live-dot"></span> Running locally<p>Your enabled contexts feed FrameLM. Changes apply as soon as you save.</p></div>
+  <div class="sidebar-bottom">PROMPT → FRAME → CONTEXT<br>RESOLVE → RESPONSE</div>
+</aside>
+<main>
+  <header><div class="breadcrumb">Workspace <span>/</span> <span id="crumb">Contexts</span></div><span class="local-badge"><span class="live-dot"></span> Local workspace</span></header>
+  <div id="notice" role="status" aria-live="polite" hidden></div>
+  <section id="chat" class="panel" hidden>
+    <div class="page-head"><div><div class="eyebrow">POWERED BY YOUR CONTEXTS</div><h1>A conversation with your knowledge.</h1><p>Ask questions, follow up, and inspect the references behind each response.</p></div><button id="new-chat" class="primary">+ New conversation</button></div>
+    <div class="chat-layout"><aside class="card chat-history"><h2>Conversations</h2><p class="hint">Most recent 100 · saved locally</p><div id="chat-list"></div></aside>
+    <div class="card chat-card"><div class="card-heading"><h2 id="chat-title">New conversation</h2><button id="export-chat" class="quiet">Export chat</button></div>
+      <p id="chat-backend" class="hint"></p>
+      <div id="chat-messages" class="chat-messages" role="log" aria-label="Conversation messages" aria-live="polite"><p class="chat-welcome">What would you like to explore?<br>Start with a question about an enabled context.</p></div>
+      <form id="chat-form"><label for="chat-input">Your message</label><textarea id="chat-input" rows="3" required placeholder="Ask about your contexts…"></textarea><div class="chat-compose-actions"><span id="chat-status" role="status">Each turn searches the current enabled contexts.</span><button id="send-chat" class="primary">Send message →</button></div></form>
+    </div></div>
+  </section>
+  <section id="contexts" class="panel">
+    <div class="page-head"><div><div class="eyebrow">THE KNOWLEDGE LAYER</div><h1>Your contexts.</h1><p>Write, generate, and refine what FrameLM can reference.</p></div><button class="primary" id="new-context">+ Append context</button></div>
+    <div class="stats"><article><span>Total contexts</span><strong id="stat-total">0</strong></article><article><span><i class="dot green"></i> Enabled for retrieval</span><strong id="stat-enabled">0</strong></article><article><span><i class="dot muted"></i> Disabled</span><strong id="stat-disabled">0</strong></article></div>
+    <div class="catalogue">
+      <div class="toolbar"><label class="search"><span>⌕</span><input id="search" aria-label="Search contexts" placeholder="Search titles, text, or tags…"></label><select id="filter" aria-label="Filter contexts"><option value="all">All contexts</option><option value="enabled">Enabled</option><option value="disabled">Disabled</option></select><button id="import-files" class="quiet">Import new files</button><a class="button quiet" href="/api/export">Export JSONL</a></div>
+      <div class="table-wrap"><table><thead><tr><th>CONTEXT</th><th>TAGS</th><th>STATUS</th><th class="right">ACTIONS</th></tr></thead><tbody id="context-rows"></tbody></table></div>
+      <div id="empty" hidden>No matching contexts. Append one or generate a batch to get started.</div>
+      <div class="pagination"><span id="page-info">Loading contexts…</span><div><button id="previous" class="quiet">← Previous</button><button id="next" class="quiet">Next →</button></div></div>
+    </div>
+    <p class="caption">Disabled contexts stay editable and can be re-enabled at any time. Imported files are managed here after their first import.</p>
+  </section>
+  <section id="generator" class="panel" hidden>
+    <div class="page-head"><div><div class="eyebrow">COMPOSE A GENERATION FLOW</div><h1>From rules to context.</h1><p>Combine symbol spaces, numeric handles, and configurable transformations.</p></div></div>
+    <div class="generation-layout">
+      <form id="generator-form" class="card">
+        <div class="card-heading"><h2>Generation recipe</h2><span class="pill">4.cpp + 5.cpp + 6.cpp</span></div>
+        <div class="two-col"><label>Generation flow<select name="mode" id="mode"><option value="literal">Literal text · 6.cpp</option><option value="symbols">Symbol combinations · 4.cpp</option><option value="numeric">Numeric handles · 5.cpp</option><option value="cartesian">Custom Cartesian · 6.cpp</option><option value="repeat">Repeat records · 6.cpp</option><option value="reverse">Reverse text · 6.cpp</option></select></label><label>Object name<input name="object_name" value="reference"></label></div>
+        <label>Input text / custom alphabet<textarea name="input_value" rows="3">A context supplies reference information for a prompt.</textarea></label>
+        <div class="two-col"><label>Symbol alphabet<select name="alphabet"><option value="safe">Safe · letters, digits, underscore</option><option value="original">Original · letters, digits, space, newline</option><option value="digits">Digits · 0–9</option><option value="lower">Lowercase · a–z</option></select></label><label>Width / repeat count<input name="width" type="text" inputmode="numeric" value="4"></label></div>
+        <p id="flow-hint" class="hint">Literal produces one record. Width is unused for literal and reverse flows.</p>
+        <div class="two-col"><label>Prefix<input name="prefix" placeholder="Optional prefix"></label><label>Suffix<input name="suffix" placeholder="Optional suffix"></label></div>
+        <label>Context title template<input name="title_template" value="{object_name} / {handle}"></label>
+        <label>Context text template<textarea name="body_template" rows="3">{value}</textarea></label>
+        <p class="hint">Fields: {value}, {payload}, {ordinal}, {handle}, {object_name}, {input_name}, {flow_name}, {output_name}. Prefix and suffix are included in {value}.</p>
+        <div class="three-col"><label>Start ordinal<input name="start" type="text" inputmode="numeric" value="0"></label><label>Record limit<input name="limit" type="text" inputmode="numeric" value="100"></label><label>Handle width<input name="handle_width" type="text" inputmode="numeric" value="7"></label></div>
+        <label>Tags<input name="tags" value="generated" placeholder="Comma-separated labels"></label>
+        <details><summary>Named stages & batch options</summary><div class="two-col"><label>Input name<input name="input_name" value="input"></label><label>Flow name<input name="flow_name" value="transform"></label></div><label>Output name<input name="output_name" value="FrameLM contexts"></label><label>Separator metadata<input name="separator" value="\n"></label><label class="check"><input type="checkbox" name="all"> All remaining ordinals</label><label class="check"><input type="checkbox" name="allow_large"> Allow more than 100,000 records (maximum 1 million per batch)</label></details>
+        <label class="check"><input type="checkbox" name="enabled" checked> Enable generated contexts for retrieval</label>
+        <div class="form-actions"><button type="submit" class="primary" id="preview-button">Preview generation</button><button type="button" id="save-recipe" class="quiet">Save recipe</button><label class="button quiet file-label">Load recipe<input id="load-recipe" type="file" accept=".json" hidden></label></div>
+      </form>
+      <div class="preview-column"><div class="card preview-card"><div class="card-heading"><h2>Preview</h2><span class="pill">FIRST 10 RECORDS</span></div><div id="generation-plan" class="plan">Preview a recipe to inspect its output before appending.</div><div id="preview-records" class="preview-records"></div><button id="generate" class="primary full" disabled>Append generated contexts</button><button id="cancel-job" class="quiet full" hidden>Cancel batch</button><p id="job-status" role="status" class="hint"></p></div><div class="note-card"><h3>A sequence is not a fact.</h3><p>Use templates to give generated symbols a useful meaning. The generator follows your rules; it does not verify factual claims.</p><p>Repeated ranges skip existing records. Your edits and disabled states are preserved.</p></div></div>
+    </div>
+  </section>
+  <section id="test" class="panel" hidden>
+    <div class="page-head"><div><div class="eyebrow">CHECK THE CONNECTION</div><h1>See what FrameLM finds.</h1><p>Test the enabled contexts using the local extractive backend.</p></div></div>
+    <div class="card test-card"><form id="ask-form"><label>Prompt<textarea id="prompt" rows="3" placeholder="What is an abelian group?" required></textarea></label><div class="form-actions"><button class="primary">Run retrieval check</button><button id="reindex" type="button" class="quiet">Rebuild index</button></div></form><pre id="answer" class="answer">Your response and context references will appear here.</pre></div>
+  </section>
+<section id="controller" class="panel" hidden>
+  <div class="page-head"><div><div class="eyebrow">P&R CONTROL LAYER</div><h1>Inspect. Replay. Act.</h1><p>Explore recoverable state and its function plots. Control actions through approved skills.</p></div><button id="ct-refresh" class="primary">Refresh workspace</button></div>
+  <div class="ct-tools card">
+    <label>Entity kind<select id="ct-kind"><option value="">All kinds</option><option>context</option><option>chat</option><option>turn</option><option>generator</option><option>pandr</option><option>skill_run</option><option>view</option></select></label>
+    <label>Filter text<input id="ct-query" placeholder="Title, text or metadata"></label>
+    <label>Causal run<input id="ct-correlation" placeholder="Correlation ID (optional)"></label>
+    <button id="ct-filter">Apply filter</button><button id="ct-save-filter">Save selection</button>
+    <label>Saved selections<select id="ct-saved"><option value="">Choose…</option></select></label>
+  </div>
+  <div class="ct-grid">
+    <aside class="card"><div class="card-heading"><h2>Contexts &amp; chats</h2><button id="ct-clear">Select all</button></div><p class="hint">Select multiple entities to inspect them together.</p><div id="ct-entities" class="ct-scroll"></div><button id="ct-more-entities" hidden>Load more entities</button></aside>
+    <div class="card"><div class="card-heading"><h2>Function-plot state</h2><select id="ct-view" aria-label="Plot view"></select></div><canvas id="ct-canvas" width="1000" height="520" aria-label="Controller function plot"></canvas><p id="ct-plot-note" class="hint"></p><div id="ct-legend"></div>
+      <div class="ct-tools"><button id="ct-prev">Previous</button><button id="ct-play">Play replay</button><button id="ct-next">Next</button><label>Journal position<input type="number" id="ct-sequence" min="1" value="1"></label><button id="ct-seek">Inspect position</button></div>
+      <input id="ct-scrub" aria-label="Replay timeline" type="range" min="1" max="1" value="1">
+      <div class="ct-tools"><label>Start<input type="number" id="ct-start" min="1" value="1"></label><label>End<input type="number" id="ct-end" min="1" value="1"></label><label>Frame stride<input type="number" id="ct-stride" min="1" value="1"></label><label><input id="ct-lifecycle" type="checkbox"> Include lifecycle frames</label><button id="ct-gif">Export GIF + data</button><button id="ct-bundle">Export data</button></div>
+      <div id="ct-downloads"></div><div class="ct-tools"><label>Branch destination<input id="ct-destination" placeholder="New absolute directory"></label><button id="ct-branch">Branch selected position</button></div>
+    </div>
+  </div>
+  <div class="ct-grid"><div class="card"><h2>Event journal</h2><p id="ct-event-status" class="hint"></p><div id="ct-events" class="ct-scroll"></div><button id="ct-more-events" hidden>Load more events</button></div><div class="card"><div class="card-heading"><h2>Machine-readable state</h2><button id="ct-json">Export selection JSON</button></div><label><input id="ct-models" type="checkbox"> Include recoverable byte-function models</label><pre id="ct-inspector" class="ct-code"></pre></div></div>
+  <div class="card"><h2>Action &amp; P&R workbench</h2><p class="hint">Functions, composition, sequences, contacts, alphabets, scripts, signals, media and journals use the shared P&R runtime. Plot samples are not certified contact values.</p><div class="ct-tools"><select id="ct-command" aria-label="Controller command"></select><button id="ct-command-template">Load example input</button><button id="ct-dispatch" class="primary">Execute command</button></div><textarea id="ct-payload" rows="5" aria-label="Command JSON">{}</textarea><details><summary>Command contract</summary><pre id="ct-contract" class="ct-code"></pre></details><pre id="ct-action-result" class="ct-code"></pre></div>
+  <div class="card"><div class="card-heading"><h2>Scripts · Skills · Plugins</h2><button id="ct-pause">Pause autonomy</button></div><p class="hint">Only reviewed skill versions run. Autonomous actions need per-skill grants. Installed Python is trusted host code, not sandboxed.</p><details><summary>Draft a plugin</summary><textarea id="ct-manifest" rows="10" aria-label="Plugin manifest JSON"></textarea><button id="ct-draft">Save draft</button></details><div id="ct-skills"></div>
+    <details id="ct-grant-panel"><summary>Configure autonomous grant</summary><p id="ct-grant-id"></p><textarea id="ct-grant-data" rows="7" aria-label="Autonomous grant JSON"></textarea><button id="ct-grant">Grant these capabilities</button></details>
+    <h3>Supervised action proposals</h3><div id="ct-proposals"></div>
+  </div>
+</section>
+<footer>systems-intelligence 0.4 <span>P&R Controller · Context Studio · Chat</span></footer>
+</main>
+<dialog id="editor"><form id="editor-form"><div class="dialog-head"><div class="eyebrow">CONTEXT RECORD</div><button type="button" id="close-editor" class="icon-button" aria-label="Close editor">×</button></div><h2 id="editor-heading">Append context</h2><label>Title<input id="edit-title" required maxlength="1000"></label><label>Context text<textarea id="edit-body" rows="10" required></textarea></label><label>Tags<input id="edit-tags" placeholder="e.g. mathematics, definitions"></label><label class="check"><input id="edit-enabled" type="checkbox" checked> Enabled for retrieval</label><details id="provenance-details"><summary>Generation & source details</summary><pre id="provenance"></pre></details><div id="editor-error" role="alert"></div><div class="form-actions"><button class="primary" id="save-context">Save context</button><button type="button" id="cancel-editor" class="quiet">Cancel</button></div></form></dialog>
+</body></html>

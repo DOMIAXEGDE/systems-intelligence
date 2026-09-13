@@ -1,0 +1,5 @@
+{
+  "backend": "extractive",
+  "context_dir": "contexts",
+  "index_path": "state/contexts.sqlite3"
+}

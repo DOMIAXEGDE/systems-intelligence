@@ -1,0 +1,610 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://pandr.local/schemas/signal.schema.json",
+  "title": "P&R signal (version 2)",
+  "description": "Structural validation. The runtime separately enforces canonical data, digests, prime coordinates, references, and cross-field invariants.",
+  "$ref": "#/definitions/signal",
+  "definitions": {
+    "branch": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "object",
+          "properties": {
+            "index": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "index"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "lower": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+              "maxLength": 26001
+            },
+            "upper": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+              "maxLength": 26001
+            }
+          },
+          "required": [
+            "lower",
+            "upper"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "event": {
+      "type": "object",
+      "properties": {
+        "point_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "channel": {
+          "enum": [
+            "v",
+            "h"
+          ]
+        },
+        "plane": {
+          "enum": [
+            "horizontal",
+            "vertical"
+          ]
+        },
+        "direction": {
+          "enum": [
+            "left",
+            "right",
+            "up",
+            "down",
+            "coincident"
+          ]
+        },
+        "displacement": {
+          "$ref": "#/definitions/number"
+        },
+        "magnitude": {
+          "$ref": "#/definitions/number"
+        },
+        "contact": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+            "maxLength": 26001
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "endpoint": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "root_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "multiplicity": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "occurrence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "selector": {
+          "$ref": "#/definitions/selector"
+        }
+      },
+      "required": [
+        "point_id",
+        "channel",
+        "plane",
+        "direction",
+        "displacement",
+        "magnitude",
+        "contact",
+        "endpoint",
+        "root_index",
+        "multiplicity"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "plane": {
+                "enum": [
+                  "vertical"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "direction": {
+                "enum": [
+                  "up",
+                  "down",
+                  "coincident"
+                ]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "direction": {
+                "enum": [
+                  "left",
+                  "right",
+                  "coincident"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "number": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/rational"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "algebraic"
+              ]
+            },
+            "expression": {
+              "type": "string"
+            },
+            "polynomial": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+                "maxLength": 26001
+              },
+              "minItems": 2,
+              "maxItems": 33
+            },
+            "lower": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+              "maxLength": 26001
+            },
+            "upper": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+              "maxLength": 26001
+            },
+            "root_index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "solver": {
+              "type": "string",
+              "minLength": 1
+            },
+            "approx": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "expression",
+            "polynomial",
+            "lower",
+            "upper",
+            "root_index",
+            "solver",
+            "approx"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "rational": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "rational"
+          ]
+        },
+        "n": {
+          "type": "string",
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "maxLength": 13000
+        },
+        "d": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "kind",
+        "n",
+        "d"
+      ],
+      "additionalProperties": false
+    },
+    "selector": {
+      "type": "object",
+      "properties": {
+        "channel": {
+          "enum": [
+            "v",
+            "h"
+          ]
+        },
+        "plane": {
+          "enum": [
+            "horizontal",
+            "vertical"
+          ]
+        },
+        "magnitude": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+              "maxLength": 26001
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "$ref": "#/definitions/rational"
+            }
+          ]
+        },
+        "displacement": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+              "maxLength": 26001
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "$ref": "#/definitions/rational"
+            }
+          ]
+        },
+        "direction": {
+          "enum": [
+            "left",
+            "right",
+            "up",
+            "down",
+            "coincident"
+          ]
+        },
+        "point_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "branch": {
+          "$ref": "#/definitions/branch"
+        },
+        "layer_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "channel"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "required": [
+            "magnitude"
+          ]
+        },
+        {
+          "required": [
+            "displacement"
+          ]
+        }
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "direction": {
+                "enum": [
+                  "up",
+                  "down"
+                ]
+              }
+            },
+            "required": [
+              "direction"
+            ]
+          },
+          "then": {
+            "properties": {
+              "plane": {
+                "enum": [
+                  "vertical"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "direction": {
+                "enum": [
+                  "left",
+                  "right"
+                ]
+              }
+            },
+            "required": [
+              "direction"
+            ]
+          },
+          "then": {
+            "properties": {
+              "plane": {
+                "enum": [
+                  "horizontal"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "signal": {
+      "type": "object",
+      "properties": {
+        "protocol": {
+          "enum": [
+            "pandr-signal-v2"
+          ]
+        },
+        "message_id": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "transaction_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_session": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_layer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_port": {
+          "enum": [
+            "output"
+          ]
+        },
+        "source_revision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source_domain_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "destination": {
+          "type": "string",
+          "minLength": 1
+        },
+        "destination_layer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "destination_port": {
+          "enum": [
+            "input"
+          ]
+        },
+        "expected_revision": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "expected_domain_hash": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "stream_id": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "logical_tick": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "hop_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_hops": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 256
+        },
+        "payload_type": {
+          "enum": [
+            "rank-stream",
+            "artifact-reference",
+            "text",
+            "events"
+          ]
+        },
+        "payload": {},
+        "payload_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "codec": {
+          "enum": [
+            "domalec-shortlex-repo-v1"
+          ]
+        },
+        "correlation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "acknowledged",
+            "failed"
+          ]
+        },
+        "delivery_detail": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "protocol",
+        "message_id",
+        "transaction_id",
+        "source_session",
+        "source_layer",
+        "source_port",
+        "source_revision",
+        "source_domain_hash",
+        "destination",
+        "destination_layer",
+        "destination_port",
+        "expected_revision",
+        "expected_domain_hash",
+        "stream_id",
+        "sequence",
+        "logical_tick",
+        "hop_count",
+        "max_hops",
+        "payload_type",
+        "payload",
+        "payload_digest",
+        "codec",
+        "correlation_id"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "payload_type": {
+                "enum": [
+                  "rank-stream"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]*)$",
+                  "maxLength": 13000
+                },
+                "maxItems": 10000
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "payload_type": {
+                "enum": [
+                  "text"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "payload_type": {
+                "enum": [
+                  "events"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/event"
+                },
+                "maxItems": 10000
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

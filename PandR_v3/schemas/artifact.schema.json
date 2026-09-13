@@ -1,0 +1,301 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://pandr.local/schemas/artifact.schema.json",
+  "title": "P&R artifact (version 1)",
+  "description": "Structural validation. The runtime separately enforces canonical data, digests, prime coordinates, references, and cross-field invariants.",
+  "$ref": "#/definitions/artifact",
+  "definitions": {
+    "artifact": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "enum": [
+            "pandr-artifact/1"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "code"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?![A-Za-z]:)(?![/\\\\])(?!.*(?:^|[/\\\\])\\.\\.(?:[/\\\\]|$)).+$"
+        },
+        "mime": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/blob"
+          }
+        },
+        "renderer": {
+          "enum": [
+            "pandr-utf8-v1",
+            "pandr-pixels-v1",
+            "pandr-integer-pcm-v1",
+            "pandr-apng-v1"
+          ]
+        },
+        "encoding": {
+          "enum": [
+            "utf-8"
+          ]
+        },
+        "normalization": {
+          "enum": [
+            "none"
+          ]
+        },
+        "language": {
+          "type": "string"
+        },
+        "validation": {
+          "enum": [
+            "unvalidated",
+            "valid",
+            "invalid"
+          ]
+        },
+        "executed": {
+          "enum": [
+            false
+          ]
+        },
+        "pillow_version": {
+          "type": "string"
+        },
+        "zlib_version": {
+          "type": "string"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "mode": {
+          "type": "string"
+        },
+        "compositing": {
+          "enum": [
+            "replace-rgba"
+          ]
+        },
+        "scan_order": {
+          "enum": [
+            "row-major"
+          ]
+        },
+        "pixel_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "glyph_stream": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?![A-Za-z]:)(?![/\\\\])(?!.*(?:^|[/\\\\])\\.\\.(?:[/\\\\]|$)).+$"
+        },
+        "alphabet_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "alphabet_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "alphabet_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "sample_rate": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "channels": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2
+        },
+        "bit_depth": {
+          "enum": [
+            16
+          ]
+        },
+        "sample_frames": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sample_values": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "duration": {
+          "type": "string",
+          "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+          "maxLength": 26001
+        },
+        "pcm_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "event_timing": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "event": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "rank": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "start_sample": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "sample_count": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "frequency": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "event",
+              "rank",
+              "start_sample",
+              "sample_count",
+              "frequency"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "fps": {
+          "type": "string",
+          "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+          "maxLength": 26001
+        },
+        "frame_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "encoded_frame_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "audio_muxed": {
+          "enum": [
+            false
+          ]
+        },
+        "timeline": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?![A-Za-z]:)(?![/\\\\])(?!.*(?:^|[/\\\\])\\.\\.(?:[/\\\\]|$)).+$"
+        },
+        "frame_pixel_hashes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "properties": {
+            "domain_hash": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "request_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "alphabet_digest": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "codec": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "domain_hash",
+            "request_id",
+            "alphabet_digest",
+            "codec"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "schema",
+        "kind",
+        "path",
+        "mime",
+        "sha256",
+        "bytes",
+        "total_bytes",
+        "parameters",
+        "dependencies",
+        "renderer"
+      ],
+      "additionalProperties": false
+    },
+    "blob": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?![A-Za-z]:)(?![/\\\\])(?!.*(?:^|[/\\\\])\\.\\.(?:[/\\\\]|$)).+$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "path",
+        "sha256",
+        "bytes"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

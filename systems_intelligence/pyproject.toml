@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "systems-intelligence"
+version = "0.4.0"
+description = "Context, chat and generation workspace with a P&R controller"
+requires-python = ">=3.11"
+dependencies = ["pandr>=2.0.0,<3", "packaging>=23"]
+
+[project.scripts]
+systems-intelligence = "framelm.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["framelm*"]
+
+[tool.setuptools.package-data]
+framelm = ["studio_web/*"]

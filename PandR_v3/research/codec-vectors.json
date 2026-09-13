@@ -1,0 +1,244 @@
+{
+    "schema": "pandr-shortlex-research-vectors/1.0",
+    "provenance": {
+        "kind": "executed-pinned-public-PHP-source-offline",
+        "repository": "https://github.com/DOMIAXEGDE/Language",
+        "commit": "31d13acd4329364f649d97f3a6806d5fa5b3d5d1",
+        "codec": "src/SequentialStringId.php",
+        "arithmetic": "src/BigNatural.php",
+        "runtime": "8.5.1",
+        "deployed_server_tested": false
+    },
+    "roundtrip": [
+        {
+            "name": "empty",
+            "alphabet": "ab",
+            "text": "",
+            "id": "0"
+        },
+        {
+            "name": "a",
+            "alphabet": "ab",
+            "text": "a",
+            "id": "1"
+        },
+        {
+            "name": "b",
+            "alphabet": "ab",
+            "text": "b",
+            "id": "2"
+        },
+        {
+            "name": "aa",
+            "alphabet": "ab",
+            "text": "aa",
+            "id": "3"
+        },
+        {
+            "name": "ab",
+            "alphabet": "ab",
+            "text": "ab",
+            "id": "4"
+        },
+        {
+            "name": "ba",
+            "alphabet": "ab",
+            "text": "ba",
+            "id": "5"
+        },
+        {
+            "name": "bb",
+            "alphabet": "ab",
+            "text": "bb",
+            "id": "6"
+        },
+        {
+            "name": "aaa-next-bucket",
+            "alphabet": "ab",
+            "text": "aaa",
+            "id": "7"
+        },
+        {
+            "name": "alphabet-order-changed",
+            "alphabet": "ba",
+            "text": "ab",
+            "id": "5"
+        },
+        {
+            "name": "leading-first-symbols",
+            "alphabet": "01",
+            "text": "001",
+            "id": "8"
+        },
+        {
+            "name": "unicode-repository-test",
+            "alphabet": "αβ🙂🚀 ",
+            "text": "🚀 α🙂β🚀",
+            "id": "15839"
+        },
+        {
+            "name": "unicode-composed",
+            "alphabet": "éé",
+            "text": "é",
+            "id": "1"
+        },
+        {
+            "name": "unicode-decomposed",
+            "alphabet": "éé",
+            "text": "é",
+            "id": "9"
+        },
+        {
+            "name": "ascii-space",
+            "alphabet": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
+            "text": " ",
+            "id": "1"
+        },
+        {
+            "name": "ascii-A",
+            "alphabet": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
+            "text": "A",
+            "id": "34"
+        },
+        {
+            "name": "ascii-tilde",
+            "alphabet": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
+            "text": "~",
+            "id": "95"
+        },
+        {
+            "name": "ascii-two-spaces",
+            "alphabet": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
+            "text": "  ",
+            "id": "96"
+        },
+        {
+            "name": "ascii-punctuation-and-case",
+            "alphabet": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
+            "text": "Hello, P&R!",
+            "id": "2499455179395414973772"
+        },
+        {
+            "name": "explicit-control-alphabet",
+            "alphabet": "a\n\t ",
+            "text": "a\n\t ",
+            "id": "112"
+        },
+        {
+            "name": "long-repository-test",
+            "alphabet": "01",
+            "text": "101100101011001010110010101100101011001010110010101100101011001010110010101100101011001010110010101100101011001010110010101100101011001010110010101100101011001010110010101100101011001010110010101100101011001010110010101100101011001010110010101100101011001010110010101100101011001010110010101100101011001010110010101100101011001010110010101100101011001010110010101100101011001010110010101100101011001010110010101100101011001010110010101100101011001010110010101100101011001010110010",
+            "id": "5300851459948331906620516080393886315251541159897774542439274366736415540819445151027813892652909896126294357551251245936192052820124813873033905"
+        }
+    ],
+    "decode_aliases": [
+        {
+            "name": "leading-zero-000",
+            "alphabet": "ab",
+            "input_id": "000",
+            "text": "",
+            "canonical_id": "0"
+        },
+        {
+            "name": "leading-zero-0004",
+            "alphabet": "ab",
+            "input_id": "0004",
+            "text": "ab",
+            "canonical_id": "4"
+        }
+    ],
+    "rejections": [
+        {
+            "name": "empty-alphabet",
+            "alphabet": "",
+            "operation": "construct",
+            "input": "",
+            "message": "Define an alphabet with at least two symbols."
+        },
+        {
+            "name": "unary-alphabet",
+            "alphabet": "a",
+            "operation": "construct",
+            "input": "",
+            "message": "Define an alphabet with at least two symbols."
+        },
+        {
+            "name": "duplicate-alphabet",
+            "alphabet": "aab",
+            "operation": "construct",
+            "input": "",
+            "message": "Alphabet symbol “a” occurs more than once."
+        },
+        {
+            "name": "outside-alphabet",
+            "alphabet": "ab",
+            "operation": "encode",
+            "input": "abc",
+            "message": "Symbol “c” at position 3 is not present in the input alphabet."
+        },
+        {
+            "name": "default-newline",
+            "alphabet": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
+            "operation": "encode",
+            "input": "a\n",
+            "message": "Symbol LINE FEED at position 2 is not present in the input alphabet."
+        },
+        {
+            "name": "empty-id",
+            "alphabet": "ab",
+            "operation": "decode",
+            "input": "",
+            "message": "Expected a non-negative decimal integer."
+        },
+        {
+            "name": "negative-id",
+            "alphabet": "ab",
+            "operation": "decode",
+            "input": "-1",
+            "message": "Expected a non-negative decimal integer."
+        },
+        {
+            "name": "plus-id",
+            "alphabet": "ab",
+            "operation": "decode",
+            "input": "+1",
+            "message": "Expected a non-negative decimal integer."
+        },
+        {
+            "name": "space-id",
+            "alphabet": "ab",
+            "operation": "decode",
+            "input": " 1",
+            "message": "Expected a non-negative decimal integer."
+        },
+        {
+            "name": "decimal-point-id",
+            "alphabet": "ab",
+            "operation": "decode",
+            "input": "1.0",
+            "message": "Expected a non-negative decimal integer."
+        },
+        {
+            "name": "exponent-id",
+            "alphabet": "ab",
+            "operation": "decode",
+            "input": "1e2",
+            "message": "Expected a non-negative decimal integer."
+        },
+        {
+            "name": "unicode-digit-id",
+            "alphabet": "ab",
+            "operation": "decode",
+            "input": "١",
+            "message": "Expected a non-negative decimal integer."
+        },
+        {
+            "name": "newline-id",
+            "alphabet": "ab",
+            "operation": "decode",
+            "input": "1\n",
+            "message": "Expected a non-negative decimal integer."
+        }
+    ],
+    "published_records_verified": 209
+}

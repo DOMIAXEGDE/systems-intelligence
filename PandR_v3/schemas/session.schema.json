@@ -1,0 +1,3088 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://pandr.local/schemas/session.schema.json",
+  "title": "P&R session (version 2)",
+  "description": "Structural validation. The runtime separately enforces canonical data, digests, prime coordinates, references, and cross-field invariants.",
+  "$ref": "#/definitions/session",
+  "definitions": {
+    "alphabet": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "enum": [
+            "pandr-alphabet/1"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000000
+        },
+        "symbols": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 2,
+          "maxItems": 1024,
+          "uniqueItems": true
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 256
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 256
+        },
+        "glyphs": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[01]+$"
+            },
+            "minItems": 1,
+            "maxItems": 256
+          }
+        },
+        "color_mode": {
+          "enum": [
+            "1"
+          ]
+        },
+        "palette": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 255
+            },
+            "minItems": 4,
+            "maxItems": 4
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "metrics": {
+          "type": "object",
+          "properties": {
+            "baseline": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "advance": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "baseline",
+            "advance"
+          ],
+          "additionalProperties": false
+        },
+        "metadata": {
+          "type": "object"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "previous_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "schema",
+        "id",
+        "version",
+        "symbols",
+        "width",
+        "height",
+        "glyphs",
+        "color_mode",
+        "palette",
+        "metrics",
+        "metadata",
+        "digest"
+      ],
+      "additionalProperties": false
+    },
+    "artifact": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "enum": [
+            "pandr-artifact/1"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "code"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?![A-Za-z]:)(?![/\\\\])(?!.*(?:^|[/\\\\])\\.\\.(?:[/\\\\]|$)).+$"
+        },
+        "mime": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/blob"
+          }
+        },
+        "renderer": {
+          "enum": [
+            "pandr-utf8-v1",
+            "pandr-pixels-v1",
+            "pandr-integer-pcm-v1",
+            "pandr-apng-v1"
+          ]
+        },
+        "encoding": {
+          "enum": [
+            "utf-8"
+          ]
+        },
+        "normalization": {
+          "enum": [
+            "none"
+          ]
+        },
+        "language": {
+          "type": "string"
+        },
+        "validation": {
+          "enum": [
+            "unvalidated",
+            "valid",
+            "invalid"
+          ]
+        },
+        "executed": {
+          "enum": [
+            false
+          ]
+        },
+        "pillow_version": {
+          "type": "string"
+        },
+        "zlib_version": {
+          "type": "string"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "mode": {
+          "type": "string"
+        },
+        "compositing": {
+          "enum": [
+            "replace-rgba"
+          ]
+        },
+        "scan_order": {
+          "enum": [
+            "row-major"
+          ]
+        },
+        "pixel_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "glyph_stream": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?![A-Za-z]:)(?![/\\\\])(?!.*(?:^|[/\\\\])\\.\\.(?:[/\\\\]|$)).+$"
+        },
+        "alphabet_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "alphabet_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "alphabet_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "sample_rate": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "channels": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2
+        },
+        "bit_depth": {
+          "enum": [
+            16
+          ]
+        },
+        "sample_frames": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sample_values": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "duration": {
+          "type": "string",
+          "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+          "maxLength": 26001
+        },
+        "pcm_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "event_timing": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "event": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "rank": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "start_sample": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "sample_count": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "frequency": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "event",
+              "rank",
+              "start_sample",
+              "sample_count",
+              "frequency"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "fps": {
+          "type": "string",
+          "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+          "maxLength": 26001
+        },
+        "frame_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "encoded_frame_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "audio_muxed": {
+          "enum": [
+            false
+          ]
+        },
+        "timeline": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?![A-Za-z]:)(?![/\\\\])(?!.*(?:^|[/\\\\])\\.\\.(?:[/\\\\]|$)).+$"
+        },
+        "frame_pixel_hashes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "properties": {
+            "domain_hash": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "request_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "alphabet_digest": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "codec": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "domain_hash",
+            "request_id",
+            "alphabet_digest",
+            "codec"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "schema",
+        "kind",
+        "path",
+        "mime",
+        "sha256",
+        "bytes",
+        "total_bytes",
+        "parameters",
+        "dependencies",
+        "renderer"
+      ],
+      "additionalProperties": false
+    },
+    "ast": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "x",
+                "y"
+              ]
+            }
+          },
+          "required": [
+            "op"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "const"
+              ]
+            },
+            "n": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$",
+              "maxLength": 13000
+            },
+            "d": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          },
+          "required": [
+            "op",
+            "n",
+            "d"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "neg"
+              ]
+            },
+            "arg": {
+              "$ref": "#/definitions/ast"
+            }
+          },
+          "required": [
+            "op",
+            "arg"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "pow"
+              ]
+            },
+            "base": {
+              "$ref": "#/definitions/ast"
+            },
+            "exponent": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 32
+            }
+          },
+          "required": [
+            "op",
+            "base",
+            "exponent"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "compose"
+              ]
+            },
+            "outer": {
+              "$ref": "#/definitions/ast"
+            },
+            "inner": {
+              "$ref": "#/definitions/ast"
+            }
+          },
+          "required": [
+            "op",
+            "outer",
+            "inner"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "add",
+                "sub",
+                "mul",
+                "div"
+              ]
+            },
+            "left": {
+              "$ref": "#/definitions/ast"
+            },
+            "right": {
+              "$ref": "#/definitions/ast"
+            }
+          },
+          "required": [
+            "op",
+            "left",
+            "right"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "symbol"
+              ]
+            },
+            "name": {
+              "enum": [
+                "pi",
+                "e",
+                "E"
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "name"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "call"
+              ]
+            },
+            "name": {
+              "enum": [
+                "sin",
+                "cos",
+                "tan",
+                "asin",
+                "acos",
+                "atan",
+                "atan2",
+                "sinh",
+                "cosh",
+                "tanh",
+                "asinh",
+                "acosh",
+                "atanh",
+                "exp",
+                "log",
+                "sqrt",
+                "erf",
+                "erfc",
+                "gamma",
+                "loggamma",
+                "floor",
+                "sign",
+                "sinc",
+                "besselj",
+                "bessely",
+                "abs",
+                "ceil",
+                "min",
+                "max"
+              ]
+            },
+            "args": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ast"
+              },
+              "minItems": 1,
+              "maxItems": 32
+            }
+          },
+          "required": [
+            "op",
+            "name",
+            "args"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "power"
+              ]
+            },
+            "base": {
+              "$ref": "#/definitions/ast"
+            },
+            "exponent": {
+              "$ref": "#/definitions/ast"
+            }
+          },
+          "required": [
+            "op",
+            "base",
+            "exponent"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "implicit",
+                "not"
+              ]
+            },
+            "arg": {
+              "$ref": "#/definitions/ast"
+            }
+          },
+          "required": [
+            "op",
+            "arg"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "union",
+                "and",
+                "or"
+              ]
+            },
+            "args": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ast"
+              },
+              "minItems": 1,
+              "maxItems": 32
+            }
+          },
+          "required": [
+            "op",
+            "args"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "compare"
+              ]
+            },
+            "kind": {
+              "enum": [
+                "lt",
+                "le",
+                "gt",
+                "ge",
+                "eq",
+                "ne"
+              ]
+            },
+            "left": {
+              "$ref": "#/definitions/ast"
+            },
+            "right": {
+              "$ref": "#/definitions/ast"
+            }
+          },
+          "required": [
+            "op",
+            "kind",
+            "left",
+            "right"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "where"
+              ]
+            },
+            "test": {
+              "$ref": "#/definitions/ast"
+            },
+            "yes": {
+              "$ref": "#/definitions/ast"
+            },
+            "no": {
+              "$ref": "#/definitions/ast"
+            }
+          },
+          "required": [
+            "op",
+            "test",
+            "yes",
+            "no"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "blob": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?![A-Za-z]:)(?![/\\\\])(?!.*(?:^|[/\\\\])\\.\\.(?:[/\\\\]|$)).+$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "path",
+        "sha256",
+        "bytes"
+      ],
+      "additionalProperties": false
+    },
+    "branch": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "object",
+          "properties": {
+            "index": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "index"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "lower": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+              "maxLength": 26001
+            },
+            "upper": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+              "maxLength": 26001
+            }
+          },
+          "required": [
+            "lower",
+            "upper"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "budgets": {
+      "type": "object",
+      "properties": {
+        "max_points": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_events": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_terms": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_operations": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_degree": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_queue": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_output_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_ticks": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "max_points",
+        "max_events",
+        "max_terms",
+        "max_operations",
+        "max_degree",
+        "max_queue",
+        "max_output_bytes",
+        "max_ticks"
+      ],
+      "additionalProperties": false
+    },
+    "command": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "set_function",
+                "precompose",
+                "postcompose"
+              ]
+            },
+            "function": {
+              "$ref": "#/definitions/function"
+            }
+          },
+          "required": [
+            "op",
+            "function"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "translate"
+              ]
+            },
+            "dx": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+              "maxLength": 26001
+            },
+            "dy": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+              "maxLength": 26001
+            }
+          },
+          "required": [
+            "op",
+            "dx",
+            "dy"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "scale"
+              ]
+            },
+            "sx": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+              "maxLength": 26001
+            },
+            "sy": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+              "maxLength": 26001
+            }
+          },
+          "required": [
+            "op",
+            "sx",
+            "sy"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "reflect_x",
+                "reflect_y"
+              ]
+            }
+          },
+          "required": [
+            "op"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "resolve"
+              ]
+            },
+            "sequence": {
+              "$ref": "#/definitions/sequenceSource"
+            },
+            "options": {
+              "$ref": "#/definitions/sequenceOptions"
+            }
+          },
+          "required": [
+            "op",
+            "sequence",
+            "options"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "define_alphabet"
+              ]
+            },
+            "manifest": {
+              "$ref": "#/definitions/alphabet"
+            }
+          },
+          "required": [
+            "op",
+            "manifest"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "render"
+              ]
+            },
+            "kind": {
+              "enum": [
+                "text",
+                "image",
+                "audio",
+                "video",
+                "code"
+              ]
+            },
+            "payload": {},
+            "parameters": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "op",
+            "kind",
+            "payload",
+            "parameters"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "add_layer"
+              ]
+            },
+            "type": {
+              "enum": [
+                "geometry",
+                "sequence",
+                "numeric",
+                "alphabet",
+                "text",
+                "image",
+                "audio",
+                "video",
+                "code"
+              ]
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "config": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "op",
+            "type",
+            "id",
+            "config"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "configure_layer"
+              ]
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "changes": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "config": {
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "op",
+            "id",
+            "changes"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "remove_layer"
+              ]
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "op",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "save_script"
+              ]
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "op",
+            "id",
+            "source"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "set_notes"
+              ]
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "op",
+            "text"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "set_geometry"
+              ]
+            },
+            "changes": {
+              "type": "object",
+              "properties": {
+                "window": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+                    "maxLength": 26001
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                "root_policy": {
+                  "enum": [
+                    "unique",
+                    "all",
+                    "leftmost",
+                    "rightmost",
+                    "nearest_contact",
+                    "explicit_branch"
+                  ]
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "op",
+            "changes"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "set_fabric"
+              ]
+            },
+            "points": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/point"
+              },
+              "minItems": 1,
+              "maxItems": 4096
+            }
+          },
+          "required": [
+            "op",
+            "points"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "set_budgets"
+              ]
+            },
+            "changes": {
+              "type": "object",
+              "properties": {
+                "max_points": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "max_events": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "max_terms": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "max_operations": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "max_degree": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "max_queue": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "max_output_bytes": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "max_ticks": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "op",
+            "changes"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "register_contract"
+              ]
+            },
+            "contract": {
+              "$ref": "#/definitions/contract"
+            }
+          },
+          "required": [
+            "op",
+            "contract"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "connect"
+              ]
+            },
+            "source_layer": {
+              "type": "string",
+              "minLength": 1
+            },
+            "destination": {
+              "type": "string",
+              "minLength": 1
+            },
+            "options": {
+              "$ref": "#/definitions/signalOptions"
+            }
+          },
+          "required": [
+            "op",
+            "source_layer",
+            "destination",
+            "options"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "send"
+              ]
+            },
+            "destination": {
+              "type": "string",
+              "minLength": 1
+            },
+            "payload": {},
+            "payload_type": {
+              "enum": [
+                "rank-stream",
+                "artifact-reference",
+                "text",
+                "events"
+              ]
+            },
+            "options": {
+              "$ref": "#/definitions/signalOptions"
+            }
+          },
+          "required": [
+            "op",
+            "destination",
+            "payload",
+            "payload_type",
+            "options"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "receive"
+              ]
+            },
+            "envelope": {
+              "$ref": "#/definitions/signal"
+            }
+          },
+          "required": [
+            "op",
+            "envelope"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "contract": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "allowed_commands": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "set_function",
+              "translate",
+              "scale",
+              "reflect_x",
+              "reflect_y",
+              "precompose",
+              "postcompose",
+              "resolve",
+              "define_alphabet",
+              "render",
+              "add_layer",
+              "configure_layer",
+              "remove_layer",
+              "save_script",
+              "set_notes",
+              "send",
+              "receive",
+              "set_geometry",
+              "register_contract",
+              "connect",
+              "set_budgets",
+              "set_fabric"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "preconditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/predicate"
+          }
+        },
+        "postconditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/predicate"
+          }
+        },
+        "max_commands": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "allowed_commands",
+        "preconditions",
+        "postconditions",
+        "max_commands",
+        "digest"
+      ],
+      "additionalProperties": false
+    },
+    "domain": {
+      "type": "object",
+      "properties": {
+        "fabric": {
+          "$ref": "#/definitions/fabric"
+        },
+        "functions": {
+          "type": "object",
+          "required": [
+            "main"
+          ],
+          "additionalProperties": {
+            "$ref": "#/definitions/function"
+          }
+        },
+        "geometry": {
+          "$ref": "#/definitions/geometry"
+        },
+        "layers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/layer"
+          },
+          "minItems": 1,
+          "maxItems": 17
+        },
+        "alphabets": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/alphabet"
+          }
+        },
+        "selected_alphabet": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contracts": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/contract"
+          }
+        },
+        "sequences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sequence"
+          }
+        },
+        "routes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/route"
+          }
+        },
+        "budgets": {
+          "$ref": "#/definitions/budgets"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "last_events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/event"
+          }
+        },
+        "last_ranks": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "maxLength": 13000
+          },
+          "maxItems": 10000
+        },
+        "received": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/received"
+          }
+        }
+      },
+      "required": [
+        "fabric",
+        "functions",
+        "geometry",
+        "layers",
+        "alphabets",
+        "selected_alphabet",
+        "contracts",
+        "sequences",
+        "routes",
+        "budgets",
+        "tick",
+        "last_events",
+        "last_ranks",
+        "received"
+      ],
+      "additionalProperties": false
+    },
+    "event": {
+      "type": "object",
+      "properties": {
+        "point_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "channel": {
+          "enum": [
+            "v",
+            "h"
+          ]
+        },
+        "plane": {
+          "enum": [
+            "horizontal",
+            "vertical"
+          ]
+        },
+        "direction": {
+          "enum": [
+            "left",
+            "right",
+            "up",
+            "down",
+            "coincident"
+          ]
+        },
+        "displacement": {
+          "$ref": "#/definitions/number"
+        },
+        "magnitude": {
+          "$ref": "#/definitions/number"
+        },
+        "contact": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+            "maxLength": 26001
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "endpoint": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "root_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "multiplicity": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "occurrence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "selector": {
+          "$ref": "#/definitions/selector"
+        }
+      },
+      "required": [
+        "point_id",
+        "channel",
+        "plane",
+        "direction",
+        "displacement",
+        "magnitude",
+        "contact",
+        "endpoint",
+        "root_index",
+        "multiplicity"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "plane": {
+                "enum": [
+                  "vertical"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "direction": {
+                "enum": [
+                  "up",
+                  "down",
+                  "coincident"
+                ]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "direction": {
+                "enum": [
+                  "left",
+                  "right",
+                  "coincident"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "fabric": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "points": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/point"
+          },
+          "minItems": 1,
+          "maxItems": 4096
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "id",
+        "points",
+        "digest"
+      ],
+      "additionalProperties": false
+    },
+    "function": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "enum": [
+            1
+          ]
+        },
+        "ast": {
+          "$ref": "#/definitions/ast"
+        },
+        "normalized": {
+          "type": "string"
+        },
+        "domain": {
+          "type": "object",
+          "properties": {
+            "nonzero": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "nonzero"
+          ],
+          "additionalProperties": false
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "enum": [
+                  "translate",
+                  "scale",
+                  "compose"
+                ]
+              },
+              "dx": {
+                "type": "string",
+                "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+                "maxLength": 26001
+              },
+              "dy": {
+                "type": "string",
+                "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+                "maxLength": 26001
+              },
+              "sx": {
+                "type": "string",
+                "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+                "maxLength": 26001
+              },
+              "sy": {
+                "type": "string",
+                "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+                "maxLength": 26001
+              },
+              "inner_digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "operation"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "version",
+        "ast",
+        "normalized",
+        "domain",
+        "history",
+        "digest"
+      ],
+      "additionalProperties": false
+    },
+    "geometry": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "enum": [
+            "contacts-xy-v2"
+          ]
+        },
+        "window": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+            "maxLength": 26001
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "root_policy": {
+          "enum": [
+            "unique",
+            "all",
+            "leftmost",
+            "rightmost",
+            "nearest_contact",
+            "explicit_branch"
+          ]
+        }
+      },
+      "required": [
+        "profile",
+        "window",
+        "root_policy"
+      ],
+      "additionalProperties": false
+    },
+    "layer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "enum": [
+            "geometry",
+            "sequence",
+            "numeric",
+            "alphabet",
+            "text",
+            "image",
+            "audio",
+            "video",
+            "code"
+          ]
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "config": {
+          "type": "object"
+        },
+        "state": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "enabled",
+        "config",
+        "state"
+      ],
+      "additionalProperties": false
+    },
+    "number": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/rational"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "algebraic"
+              ]
+            },
+            "expression": {
+              "type": "string"
+            },
+            "polynomial": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+                "maxLength": 26001
+              },
+              "minItems": 2,
+              "maxItems": 33
+            },
+            "lower": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+              "maxLength": 26001
+            },
+            "upper": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+              "maxLength": 26001
+            },
+            "root_index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "solver": {
+              "type": "string",
+              "minLength": 1
+            },
+            "approx": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "expression",
+            "polynomial",
+            "lower",
+            "upper",
+            "root_index",
+            "solver",
+            "approx"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "output": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "enum": [
+                "events"
+              ]
+            },
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/event"
+              }
+            }
+          },
+          "required": [
+            "type",
+            "data"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "enum": [
+                "artifact"
+              ]
+            },
+            "data": {
+              "$ref": "#/definitions/artifact"
+            }
+          },
+          "required": [
+            "type",
+            "data"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "enum": [
+                "alphabet"
+              ]
+            },
+            "data": {
+              "$ref": "#/definitions/alphabet"
+            }
+          },
+          "required": [
+            "type",
+            "data"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "enum": [
+                "signal"
+              ]
+            },
+            "data": {
+              "$ref": "#/definitions/signal"
+            }
+          },
+          "required": [
+            "type",
+            "data"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "enum": [
+                "received"
+              ]
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "message_id": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              },
+              "required": [
+                "message_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "data"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "point": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "x",
+        "y"
+      ],
+      "additionalProperties": false
+    },
+    "predicate": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "points_unchanged"
+              ]
+            }
+          },
+          "required": [
+            "op"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "layer_limit"
+              ]
+            },
+            "value": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 17
+            }
+          },
+          "required": [
+            "op"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "output_count"
+              ]
+            },
+            "value": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "op",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "function_is",
+                "domain_hash"
+              ]
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "op",
+            "digest"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "rational": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "rational"
+          ]
+        },
+        "n": {
+          "type": "string",
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "maxLength": 13000
+        },
+        "d": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "kind",
+        "n",
+        "d"
+      ],
+      "additionalProperties": false
+    },
+    "receipt": {
+      "type": "object",
+      "properties": {
+        "transaction_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "committed"
+          ]
+        },
+        "from_revision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "to_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "before_domain_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "after_domain_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "plan_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "contract": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contract_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/output"
+          }
+        },
+        "previous_digest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "budget_usage": {
+          "type": "object",
+          "properties": {
+            "commands": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "events": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "commands",
+            "events"
+          ],
+          "additionalProperties": false
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "transaction_id",
+        "status",
+        "from_revision",
+        "to_revision",
+        "before_domain_hash",
+        "after_domain_hash",
+        "plan_digest",
+        "contract",
+        "contract_digest",
+        "outputs",
+        "previous_digest",
+        "budget_usage",
+        "digest"
+      ],
+      "additionalProperties": false
+    },
+    "received": {
+      "type": "object",
+      "properties": {
+        "message_id": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "stream_id": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "payload_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "message_id",
+        "stream_id",
+        "payload_digest",
+        "sequence"
+      ],
+      "additionalProperties": false
+    },
+    "route": {
+      "type": "object",
+      "properties": {
+        "source_layer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "destination": {
+          "type": "string",
+          "minLength": 1
+        },
+        "options": {
+          "$ref": "#/definitions/signalOptions"
+        }
+      },
+      "required": [
+        "source_layer",
+        "destination",
+        "options"
+      ],
+      "additionalProperties": false
+    },
+    "selector": {
+      "type": "object",
+      "properties": {
+        "channel": {
+          "enum": [
+            "v",
+            "h"
+          ]
+        },
+        "plane": {
+          "enum": [
+            "horizontal",
+            "vertical"
+          ]
+        },
+        "magnitude": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+              "maxLength": 26001
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "$ref": "#/definitions/rational"
+            }
+          ]
+        },
+        "displacement": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)(/[1-9][0-9]*)?$",
+              "maxLength": 26001
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "$ref": "#/definitions/rational"
+            }
+          ]
+        },
+        "direction": {
+          "enum": [
+            "left",
+            "right",
+            "up",
+            "down",
+            "coincident"
+          ]
+        },
+        "point_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "branch": {
+          "$ref": "#/definitions/branch"
+        },
+        "layer_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "channel"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "required": [
+            "magnitude"
+          ]
+        },
+        {
+          "required": [
+            "displacement"
+          ]
+        }
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "direction": {
+                "enum": [
+                  "up",
+                  "down"
+                ]
+              }
+            },
+            "required": [
+              "direction"
+            ]
+          },
+          "then": {
+            "properties": {
+              "plane": {
+                "enum": [
+                  "vertical"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "direction": {
+                "enum": [
+                  "left",
+                  "right"
+                ]
+              }
+            },
+            "required": [
+              "direction"
+            ]
+          },
+          "then": {
+            "properties": {
+              "plane": {
+                "enum": [
+                  "horizontal"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "sequence": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "$ref": "#/definitions/sequenceSource"
+        },
+        "selectors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/selector"
+          }
+        },
+        "options": {
+          "$ref": "#/definitions/sequenceOptions"
+        }
+      },
+      "required": [
+        "source",
+        "selectors",
+        "options"
+      ],
+      "additionalProperties": false
+    },
+    "sequenceOptions": {
+      "type": "object",
+      "properties": {
+        "plane": {
+          "enum": [
+            "horizontal",
+            "vertical"
+          ]
+        },
+        "root_policy": {
+          "enum": [
+            "unique",
+            "all",
+            "leftmost",
+            "rightmost",
+            "nearest_contact",
+            "explicit_branch"
+          ]
+        },
+        "policy": {
+          "enum": [
+            "unique",
+            "all",
+            "leftmost",
+            "rightmost",
+            "nearest_contact",
+            "explicit_branch"
+          ]
+        },
+        "match_policy": {
+          "enum": [
+            "all",
+            "unique",
+            "first_ordered"
+          ]
+        },
+        "branch": {
+          "$ref": "#/definitions/branch"
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "sequenceSource": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/selector"
+          },
+          "maxItems": 4096
+        }
+      ]
+    },
+    "session": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "enum": [
+            "pandr-session-v2"
+          ]
+        },
+        "schema_version": {
+          "enum": [
+            2
+          ]
+        },
+        "session_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "engine": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "enum": [
+                "2.0.0"
+              ]
+            },
+            "geometry": {
+              "enum": [
+                "contacts-xy-v2"
+              ]
+            },
+            "codec": {
+              "enum": [
+                "domalec-shortlex-repo-v1"
+              ]
+            }
+          },
+          "required": [
+            "version",
+            "geometry",
+            "codec"
+          ],
+          "additionalProperties": false
+        },
+        "domain": {
+          "$ref": "#/definitions/domain"
+        },
+        "programs": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source": {
+                "type": "string"
+              },
+              "digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "id",
+              "source",
+              "digest"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "runs": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "committed"
+                ]
+              },
+              "plan_digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "outputs": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/output"
+                }
+              }
+            },
+            "required": [
+              "status",
+              "plan_digest",
+              "outputs"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "receipts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/receipt"
+          }
+        },
+        "request_ledger": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "request_digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "receipt": {
+                "$ref": "#/definitions/receipt"
+              }
+            },
+            "required": [
+              "request_digest",
+              "receipt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "replay_checkpoint": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "$ref": "#/definitions/domain"
+            },
+            "domain_hash": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "domain",
+            "domain_hash"
+          ],
+          "additionalProperties": false
+        },
+        "transition_log": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/transition"
+          }
+        },
+        "inbox": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/signal"
+          }
+        },
+        "outbox": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              {
+                "$ref": "#/definitions/signal"
+              },
+              {
+                "required": [
+                  "status"
+                ]
+              }
+            ]
+          }
+        },
+        "delivery_ledger": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "payload_digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "receipt": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "payload_digest",
+              "receipt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "artifacts": {
+          "type": "object",
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/artifact"
+              },
+              {
+                "$ref": "#/definitions/blob"
+              }
+            ]
+          }
+        },
+        "memory": {
+          "type": "object",
+          "properties": {
+            "workspace_notes": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "workspace_notes"
+          ],
+          "additionalProperties": false
+        },
+        "ui": {
+          "type": "object"
+        },
+        "integrity": {
+          "type": "object",
+          "properties": {
+            "domain_hash": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "receipt_head": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "payload_hash": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "domain_hash",
+            "receipt_head",
+            "payload_hash"
+          ],
+          "additionalProperties": false
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "schema",
+        "schema_version",
+        "session_id",
+        "revision",
+        "engine",
+        "domain",
+        "programs",
+        "runs",
+        "receipts",
+        "request_ledger",
+        "replay_checkpoint",
+        "transition_log",
+        "inbox",
+        "outbox",
+        "delivery_ledger",
+        "artifacts",
+        "memory",
+        "ui",
+        "integrity",
+        "created_at",
+        "updated_at"
+      ],
+      "additionalProperties": false
+    },
+    "signal": {
+      "type": "object",
+      "properties": {
+        "protocol": {
+          "enum": [
+            "pandr-signal-v2"
+          ]
+        },
+        "message_id": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "transaction_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_session": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_layer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_port": {
+          "enum": [
+            "output"
+          ]
+        },
+        "source_revision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source_domain_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "destination": {
+          "type": "string",
+          "minLength": 1
+        },
+        "destination_layer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "destination_port": {
+          "enum": [
+            "input"
+          ]
+        },
+        "expected_revision": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "expected_domain_hash": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "stream_id": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "logical_tick": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "hop_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_hops": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 256
+        },
+        "payload_type": {
+          "enum": [
+            "rank-stream",
+            "artifact-reference",
+            "text",
+            "events"
+          ]
+        },
+        "payload": {},
+        "payload_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "codec": {
+          "enum": [
+            "domalec-shortlex-repo-v1"
+          ]
+        },
+        "correlation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "acknowledged",
+            "failed"
+          ]
+        },
+        "delivery_detail": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "protocol",
+        "message_id",
+        "transaction_id",
+        "source_session",
+        "source_layer",
+        "source_port",
+        "source_revision",
+        "source_domain_hash",
+        "destination",
+        "destination_layer",
+        "destination_port",
+        "expected_revision",
+        "expected_domain_hash",
+        "stream_id",
+        "sequence",
+        "logical_tick",
+        "hop_count",
+        "max_hops",
+        "payload_type",
+        "payload",
+        "payload_digest",
+        "codec",
+        "correlation_id"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "payload_type": {
+                "enum": [
+                  "rank-stream"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]*)$",
+                  "maxLength": 13000
+                },
+                "maxItems": 10000
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "payload_type": {
+                "enum": [
+                  "text"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "payload_type": {
+                "enum": [
+                  "events"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/event"
+                },
+                "maxItems": 10000
+              }
+            }
+          }
+        }
+      ]
+    },
+    "signalOptions": {
+      "type": "object",
+      "properties": {
+        "hop_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_hops": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 256
+        },
+        "destination_layer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_revision": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "expected_domain_hash": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "correlation_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "transition": {
+      "type": "object",
+      "properties": {
+        "request_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contract": {
+          "type": "string",
+          "minLength": 1
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/command"
+          },
+          "maxItems": 4096
+        },
+        "from_revision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "before_domain_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "after_domain_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "artifact_hashes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        }
+      },
+      "required": [
+        "request_id",
+        "contract",
+        "commands",
+        "from_revision",
+        "before_domain_hash",
+        "after_domain_hash",
+        "artifact_hashes"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

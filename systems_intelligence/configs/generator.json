@@ -1,0 +1,14 @@
+{
+  "mode": "numeric",
+  "object_name": "object_handle",
+  "input_name": "decimal_digits",
+  "flow_name": "enumerate",
+  "output_name": "FrameLM contexts",
+  "width": "7",
+  "start": "0",
+  "limit": "10",
+  "title_template": "{object_name} / {handle}",
+  "body_template": "Object handle {value} maps to ordinal {ordinal}.",
+  "tags": "generated, handles",
+  "enabled": true
+}

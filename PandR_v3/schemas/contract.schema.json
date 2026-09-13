@@ -1,0 +1,159 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://pandr.local/schemas/contract.schema.json",
+  "title": "P&R contract (version 1)",
+  "description": "Structural validation. The runtime separately enforces canonical data, digests, prime coordinates, references, and cross-field invariants.",
+  "$ref": "#/definitions/contract",
+  "definitions": {
+    "contract": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "allowed_commands": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "set_function",
+              "translate",
+              "scale",
+              "reflect_x",
+              "reflect_y",
+              "precompose",
+              "postcompose",
+              "resolve",
+              "define_alphabet",
+              "render",
+              "add_layer",
+              "configure_layer",
+              "remove_layer",
+              "save_script",
+              "set_notes",
+              "send",
+              "receive",
+              "set_geometry",
+              "register_contract",
+              "connect",
+              "set_budgets",
+              "set_fabric"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "preconditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/predicate"
+          }
+        },
+        "postconditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/predicate"
+          }
+        },
+        "max_commands": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "allowed_commands",
+        "preconditions",
+        "postconditions",
+        "max_commands",
+        "digest"
+      ],
+      "additionalProperties": false
+    },
+    "predicate": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "points_unchanged"
+              ]
+            }
+          },
+          "required": [
+            "op"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "layer_limit"
+              ]
+            },
+            "value": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 17
+            }
+          },
+          "required": [
+            "op"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "output_count"
+              ]
+            },
+            "value": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "op",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "enum": [
+                "function_is",
+                "domain_hash"
+              ]
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "op",
+            "digest"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

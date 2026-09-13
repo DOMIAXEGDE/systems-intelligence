@@ -1,0 +1,17 @@
+#controller .ct-grid{display:grid;grid-template-columns:minmax(220px,1fr) minmax(480px,2.5fr);gap:18px;margin:18px 0}
+#controller .ct-tools{display:flex;flex-wrap:wrap;align-items:end;gap:12px;margin:12px 0}
+#controller label{display:flex;flex-direction:column;gap:5px;font-size:13px}
+#controller input[type=checkbox]{width:auto;display:inline-block}
+#controller .ct-scroll{max-height:370px;overflow:auto}
+#controller .ct-entity{display:flex;flex-direction:row;gap:8px;align-items:start;border-bottom:1px solid #e2e8f0;padding:10px 2px;overflow-wrap:anywhere}
+#controller .ct-event{display:block;width:100%;text-align:left;margin:5px 0;font-size:12px;white-space:normal}
+#controller .ct-code{max-height:420px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;background:#f1f5f9;border:1px solid #e2e8f0;padding:12px;border-radius:8px;font-size:12px}
+#controller canvas{display:block;width:100%;height:auto;border:1px solid #e2e8f0;background:#f8fafc;border-radius:8px}
+#controller textarea{width:100%;font-family:Consolas,monospace}
+#controller .ct-skill{border-top:1px solid #e2e8f0;padding:16px 0}
+#controller .ct-skill button{margin:4px}
+#controller .ct-proposal{border:1px solid #d97706;border-radius:8px;padding:12px;margin:10px 0}
+#ct-legend{display:flex;flex-wrap:wrap;gap:8px;font-size:11px}
+#ct-scrub{width:100%}
+#ct-downloads a{margin-right:15px}
+@media(max-width:1000px){#controller .ct-grid{grid-template-columns:1fr}#controller .ct-tools{align-items:stretch}}

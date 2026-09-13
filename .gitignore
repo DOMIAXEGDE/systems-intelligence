@@ -1,0 +1,44 @@
+# Python environments, caches, and build outputs
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+!.env.sample
+.controller-python
+
+# Application state and generated verification workspaces
+state/
+.controller-preview/
+PandR_v3/sessions/
+PandR_v3/test.json
+PandR_v3/test2.json
+PandR_v3/test.pandr
+*.sqlite3
+*.sqlite3-*
+*.db-wal
+*.db-shm
+*.log
+*.lock
+*.bak
+*.corrupt-*
+.staging/
+
+# Editor and operating-system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini

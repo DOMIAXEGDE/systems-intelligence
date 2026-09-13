@@ -1,0 +1,19 @@
+{
+  "id": "context-notes",
+  "version": "1.0.0",
+  "api_version": 1,
+  "dependencies": [],
+  "events": {
+    "plugin.context-notes.inspected": {"type":"object","properties":{"count":{"type":"integer"}},"required":["count"],"additionalProperties":false}
+  },
+  "skills": [{
+    "id": "summarize",
+    "entrypoint": "summarize.py",
+    "instructions": "Inspect enabled contexts and propose adding a short inventory note. Review the proposal before approving it. This inventory is not a factual summary of the source text.",
+    "capabilities": ["context.append"],
+    "scope": ["context:*"],
+    "triggers": [],
+    "input_schema": {"type":"object","properties":{"title":{"type":"string"}},"additionalProperties":false},
+    "output_schema": {"type":"object"}
+  }]
+}

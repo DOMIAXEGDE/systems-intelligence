@@ -1,0 +1,39 @@
+{
+  "frame": {
+    "prompt": "What is an abelian group?",
+    "intent": "explain",
+    "keywords": [
+      "abelian",
+      "group"
+    ],
+    "output_format": "prose"
+  },
+  "contexts": [
+    {
+      "id": 2,
+      "source": "mathematics.md",
+      "text": "A group is a set equipped with an associative binary operation, an identity element, and an inverse for every element. The operation maps pairs of elements back into the set. An abelian group is a group whose operation is commutative: for all elements a and b, a combined with b equals b combined with a. A sequence is an indexed family of elements. A sequence of real numbers can be written as a function from the positive integers to the real numbers. A Cayley table records a finite binary operation: the entry in row a and column b is the result of applying the operation to a and b in that order.",
+      "retrieval_score": 2.728457068895173e-06,
+      "citation": "C1"
+    }
+  ],
+  "retrieval_coverage": 1.0,
+  "backend_requested": "extractive",
+  "score_is_confidence": false,
+  "warnings": [],
+  "candidates": [
+    {
+      "text": "Relevant context excerpts (extractive baseline):\n- An abelian group is a group whose operation is commutative: for all elements a and b, a combined with b equals b combined with a. [C1]\n- A group is a set equipped with an associative binary operation, an identity element, and an inverse for every element. [C1]",
+      "origin": "extractive",
+      "score": {
+        "value": 0.9,
+        "query_coverage": 1.0,
+        "lexical_support": 0.75,
+        "valid_citation_ids": true
+      }
+    }
+  ],
+  "status": "resolved",
+  "selected_backend": "extractive",
+  "response": "Relevant context excerpts (extractive baseline):\n- An abelian group is a group whose operation is commutative: for all elements a and b, a combined with b equals b combined with a. [C1]\n- A group is a set equipped with an associative binary operation, an identity element, and an inverse for every element. [C1]"
+}

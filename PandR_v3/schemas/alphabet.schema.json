@@ -1,0 +1,125 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://pandr.local/schemas/alphabet.schema.json",
+  "title": "P&R alphabet (version 1)",
+  "description": "Structural validation. The runtime separately enforces canonical data, digests, prime coordinates, references, and cross-field invariants.",
+  "$ref": "#/definitions/alphabet",
+  "definitions": {
+    "alphabet": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "enum": [
+            "pandr-alphabet/1"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000000
+        },
+        "symbols": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 2,
+          "maxItems": 1024,
+          "uniqueItems": true
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 256
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 256
+        },
+        "glyphs": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[01]+$"
+            },
+            "minItems": 1,
+            "maxItems": 256
+          }
+        },
+        "color_mode": {
+          "enum": [
+            "1"
+          ]
+        },
+        "palette": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 255
+            },
+            "minItems": 4,
+            "maxItems": 4
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "metrics": {
+          "type": "object",
+          "properties": {
+            "baseline": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "advance": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "baseline",
+            "advance"
+          ],
+          "additionalProperties": false
+        },
+        "metadata": {
+          "type": "object"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "previous_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "schema",
+        "id",
+        "version",
+        "symbols",
+        "width",
+        "height",
+        "glyphs",
+        "color_mode",
+        "palette",
+        "metrics",
+        "metadata",
+        "digest"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

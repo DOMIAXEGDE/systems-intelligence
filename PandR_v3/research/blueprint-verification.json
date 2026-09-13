@@ -1,0 +1,115 @@
+{
+  "schema": "pandr-blueprint-verification-v1",
+  "status": "passed",
+  "scope": "Exact affine/composition examples, six-term fixture, ASCII rank projection, bijective byte framing, saved-source hashes, unchanged diagram copy. This does not implement or test the proposed P&R application.",
+  "blueprint_sha256": "c7cde34f105a585628c796fc9fe89fdd04f4feffeb2ec054de7d6a1fb94559ac",
+  "sequence_events": [
+    {
+      "occurrence": 0,
+      "point": "p0",
+      "channel": "v",
+      "magnitude": "17",
+      "direction": "right"
+    },
+    {
+      "occurrence": 1,
+      "point": "p1",
+      "channel": "v",
+      "magnitude": "7",
+      "direction": "right"
+    },
+    {
+      "occurrence": 2,
+      "point": "p2",
+      "channel": "v",
+      "magnitude": "3",
+      "direction": "right"
+    },
+    {
+      "occurrence": 3,
+      "point": "p3",
+      "channel": "v",
+      "magnitude": "23",
+      "direction": "right"
+    },
+    {
+      "occurrence": 4,
+      "point": "p4",
+      "channel": "h",
+      "magnitude": "37",
+      "direction": "left"
+    },
+    {
+      "occurrence": 5,
+      "point": "p3",
+      "channel": "v",
+      "magnitude": "23",
+      "direction": "right"
+    }
+  ],
+  "ascii_projection": "0&\"6D6",
+  "web_source_hashes_verified": 12,
+  "reference_image_sha256": "1ca5af72dcea93fa9660723bfd264380cfe06ad2f4d6e3d89c1d30312737c14c",
+  "local_source_inventory": [
+    {
+      "path": "D:\\largeLanguageModel\\operating-system\\operating-system.py",
+      "bytes": 121684,
+      "lines": 2901,
+      "sha256": "764980865208c4e3942c50d51ec094b506c9533389fbe932acec903c91c90469"
+    },
+    {
+      "path": "D:\\largeLanguageModel\\operating-system\\matrix_controller.py",
+      "bytes": 8926,
+      "lines": 210,
+      "sha256": "40d1a5ae0fca0167ea785b2f6e68bc6b5bb9d876da8503bf7d4b30a1caccae49"
+    },
+    {
+      "path": "D:\\largeLanguageModel\\operating-system\\test_operating_system.py",
+      "bytes": 12274,
+      "lines": 307,
+      "sha256": "8cce095c4311bc75db41d704f5fb192f183d710381df4db9bf39352c63f099dd"
+    },
+    {
+      "path": "D:\\largeLanguageModel\\operating-system\\cosma-x1.cpp",
+      "bytes": 27365,
+      "lines": 702,
+      "sha256": "f4023f1b596f3546dd85a6588a88ca22bd262dc353b129ec5d05c59b3d0bbb68"
+    },
+    {
+      "path": "D:\\largeLanguageModel\\operating-system\\cosma-state-revision-99.json",
+      "bytes": 79716,
+      "lines": 453,
+      "sha256": "b9008e87021b0e98ee5555987a93dcbd70413a3bee1d3c6e08dc376da820f60f"
+    },
+    {
+      "path": "D:\\largeLanguageModel\\operating-system\\operating-system-config.json",
+      "bytes": 968,
+      "lines": 45,
+      "sha256": "defd2b8730b93b21de4233836520ad66ce79807971fb9b268f80bff691773091"
+    },
+    {
+      "path": "D:\\largeLanguageModel\\operating-system\\operating-system-state.json",
+      "bytes": 80619,
+      "lines": 489,
+      "sha256": "acc3ad26d567707a0ae35b1c8a5187374bfdfc105c9e7eab4bfd7b87ad15628b"
+    },
+    {
+      "path": "D:\\largeLanguageModel\\operating-system\\matrix-controller-walkthrough.md",
+      "bytes": 1761,
+      "lines": 27,
+      "sha256": "403ac7eb9a132187f8b929cd21c724dac6a35914b038d9fa1e67fa94e1164ef8"
+    },
+    {
+      "path": "D:\\largeLanguageModel\\operating-system\\operating-system-readme.md",
+      "bytes": 1794,
+      "lines": 46,
+      "sha256": "d5fdd53e810d287782f1adc093f9bca8862ade95187628adb317ce5d5e75f45a"
+    },
+    {
+      "path": "D:\\largeLanguageModel\\operating-system\\demo.py",
+      "bytes": 1671,
+      "lines": 68,
+      "sha256": "364f34189ce3a211511fd1649268ac26d51af0931dce1638ff98e96e132fea49"
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "schema": "pandr-source-provenance/1.0",
+  "research_date_utc": "2026-09-09",
+  "repository_commit": "31d13acd4329364f649d97f3a6806d5fa5b3d5d1",
+  "snapshot_encoding": "PowerShell Invoke-WebRequest response Content saved as UTF-8 without BOM; SHA-256 covers the local saved bytes, not a separately preserved HTTP wire representation.",
+  "actions": "Public HTTPS GET requests only. The bootstrap endpoint itself initialized a fresh anonymous workspace as reported by its response. No compile/save/import POST requests. No existing browser cookies used.",
+  "sources": [
+    {
+      "local_file": "domalec-x1-observed.html",
+      "source_url": "https://domalec.com/content3/x1/index.php",
+      "sha256": "6022a23584e59dcea1c4d1e97cfa8c016ba71e6d04c99d217d6f27a8e1e61424",
+      "bytes": 9235,
+      "local_snapshot_modified_utc": "2026-09-09T02:44:51.072753+00:00"
+    },
+    {
+      "local_file": "domalec-workbench-observed.js",
+      "source_url": "https://domalec.com/content3/x1/assets/workbench.js",
+      "sha256": "742bd1ac49b45c1134f2a8bc3f419cedb5610387eb95ac356c3de5ad204aa20c",
+      "bytes": 21889,
+      "local_snapshot_modified_utc": "2026-09-09T02:45:21.448531+00:00"
+    },
+    {
+      "local_file": "domalec-bootstrap-observed.json",
+      "source_url": "https://domalec.com/content3/x1/index.php?api=1",
+      "sha256": "38c584e380550fe9aef09848601ec16dd38b2d6b1be359ee23b000261d931958",
+      "bytes": 4040,
+      "local_snapshot_modified_utc": "2026-09-09T02:45:41.287947+00:00"
+    },
+    {
+      "local_file": "domalec-repository-commit-observed.json",
+      "source_url": "https://api.github.com/repos/DOMIAXEGDE/Language/commits/main",
+      "sha256": "177b95f5e1e96ac4d428cf0b66160ace8d961fbd34bddcab48437938de937698",
+      "bytes": 158000,
+      "local_snapshot_modified_utc": "2026-09-09T02:47:25.163768+00:00"
+    },
+    {
+      "local_file": "domalec-repository-tree-observed.json",
+      "source_url": "https://api.github.com/repos/DOMIAXEGDE/Language/git/trees/main?recursive=1",
+      "sha256": "0a6896fbe3afb6c5037f1a00fcd7bc7c14e1d2325f5d9370928815f18baa7d96",
+      "bytes": 22732,
+      "local_snapshot_modified_utc": "2026-09-09T02:46:03.765694+00:00"
+    },
+    {
+      "local_file": "repository-src-SequentialStringId.php",
+      "source_url": "https://raw.githubusercontent.com/DOMIAXEGDE/Language/31d13acd4329364f649d97f3a6806d5fa5b3d5d1/src/SequentialStringId.php",
+      "sha256": "673163823f31ae6b78d96556fc69987ad67846388e9659ed4c38f31f438cda72",
+      "bytes": 5180,
+      "local_snapshot_modified_utc": "2026-09-09T02:46:28.653736+00:00",
+      "repository_path": "src/SequentialStringId.php",
+      "expected_git_blob_sha1": "6e4335310d2cadc9b3f2cc6878e3b608271238d3",
+      "snapshot_git_blob_sha1": "6e4335310d2cadc9b3f2cc6878e3b608271238d3",
+      "matches_published_blob": true
+    },
+    {
+      "local_file": "repository-src-BigNatural.php",
+      "source_url": "https://raw.githubusercontent.com/DOMIAXEGDE/Language/31d13acd4329364f649d97f3a6806d5fa5b3d5d1/src/BigNatural.php",
+      "sha256": "d9da14c1d2c6e373877cc2acf9241cbc4265f0dc29e6dc6b017605a7408cc436",
+      "bytes": 4528,
+      "local_snapshot_modified_utc": "2026-09-09T02:46:28.990387+00:00",
+      "repository_path": "src/BigNatural.php",
+      "expected_git_blob_sha1": "e9fc226e08c7a2ffa497ff755f804a0bbcc1dbe6",
+      "snapshot_git_blob_sha1": "e9fc226e08c7a2ffa497ff755f804a0bbcc1dbe6",
+      "matches_published_blob": true
+    },
+    {
+      "local_file": "repository-tests-run.php",
+      "source_url": "https://raw.githubusercontent.com/DOMIAXEGDE/Language/31d13acd4329364f649d97f3a6806d5fa5b3d5d1/tests/run.php",
+      "sha256": "8016f2bf053930d8e963efb3a526313fb6311808484c3b02d9c4e119162045fa",
+      "bytes": 7518,
+      "local_snapshot_modified_utc": "2026-09-09T02:46:29.364556+00:00",
+      "repository_path": "tests/run.php",
+      "expected_git_blob_sha1": "76fd9f114ebb80d23c4d9bb61c65c2aca7055f1f",
+      "snapshot_git_blob_sha1": "76fd9f114ebb80d23c4d9bb61c65c2aca7055f1f",
+      "matches_published_blob": true
+    },
+    {
+      "local_file": "repository-docs-GPIL.md",
+      "source_url": "https://raw.githubusercontent.com/DOMIAXEGDE/Language/31d13acd4329364f649d97f3a6806d5fa5b3d5d1/docs/GPIL.md",
+      "sha256": "c852b685f9406f47a1a081755c36c153db7ea9d24313b47dec1b3ec1ea17293b",
+      "bytes": 5512,
+      "local_snapshot_modified_utc": "2026-09-09T02:46:29.708259+00:00",
+      "repository_path": "docs/GPIL.md",
+      "expected_git_blob_sha1": "07d80c82a2a1cb2d6fa5335c2bcb2dd39822b9c1",
+      "snapshot_git_blob_sha1": "07d80c82a2a1cb2d6fa5335c2bcb2dd39822b9c1",
+      "matches_published_blob": true
+    },
+    {
+      "local_file": "repository-README.md",
+      "source_url": "https://raw.githubusercontent.com/DOMIAXEGDE/Language/31d13acd4329364f649d97f3a6806d5fa5b3d5d1/README.md",
+      "sha256": "08a5ee2296ad5f495ae2c0b65a1a943ae94b0f599808faf44771c2a8b06f0bd5",
+      "bytes": 7343,
+      "local_snapshot_modified_utc": "2026-09-09T02:46:30.015622+00:00",
+      "repository_path": "README.md",
+      "expected_git_blob_sha1": "2c84d72947419e786f23420b934d5623db386f27",
+      "snapshot_git_blob_sha1": "2c84d72947419e786f23420b934d5623db386f27",
+      "matches_published_blob": true
+    },
+    {
+      "local_file": "repository-data-events.json",
+      "source_url": "https://raw.githubusercontent.com/DOMIAXEGDE/Language/31d13acd4329364f649d97f3a6806d5fa5b3d5d1/data/events.json",
+      "sha256": "2e19215af8f0fdb4afc6f9729f4739c1a52409ae39b54834f3420de554d3f0f9",
+      "bytes": 345252,
+      "local_snapshot_modified_utc": "2026-09-09T02:47:25.545238+00:00",
+      "repository_path": "data/events.json",
+      "expected_git_blob_sha1": "84365689fb599981cd1c71e5af04ebd240625cb7",
+      "snapshot_git_blob_sha1": "84365689fb599981cd1c71e5af04ebd240625cb7",
+      "matches_published_blob": true
+    },
+    {
+      "local_file": "repository-LICENSE",
+      "source_url": "https://raw.githubusercontent.com/DOMIAXEGDE/Language/31d13acd4329364f649d97f3a6806d5fa5b3d5d1/LICENSE",
+      "sha256": "e03be9b46e3d7449421a03a1bd73001f09f52b38ca3d3158c55b80d61c61b003",
+      "bytes": 1081,
+      "local_snapshot_modified_utc": "2026-09-09T02:47:55.356938+00:00",
+      "repository_path": "LICENSE",
+      "expected_git_blob_sha1": "3822cf14302565bdf2bf88a8a8c18edbfc6f085a",
+      "snapshot_git_blob_sha1": "3822cf14302565bdf2bf88a8a8c18edbfc6f085a",
+      "matches_published_blob": true
+    }
+  ]
+}
